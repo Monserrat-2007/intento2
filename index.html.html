@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <form method="post">
+        <h2>Bienvenido a TAF</h2>
+        <p>Crea tu usuario en TAF</p>
+
+        <div class="input-wrapper">
+            <input type="text" name="name" placeholder="Nombre">
+            <img class="input-icon" src="img/name.svg" alt="">
+        </div>
+
+        <div class="input-wrapper">
+            <input type="text" name="direction" placeholder="Direccion">
+            <img class="input-icon" src="img/direction.svg" alt="">
+        </div>
+
+        <div class="input-wrapper">
+            <input type="email" name="email" placeholder="Correo">
+            <img class="input-icon" src="img/email.svg" alt="">
+        </div>
+
+        <div class="input-wrapper">
+            <input type="tel" name="phone" placeholder="telefono">
+            <img class="input-icon" src="img/phone.svg" alt="">
+        </div>
+
+        <div class="input-wrapper">
+            <input type="password" name="password" placeholder="Contraseña">
+            <img class="input-icon" src="img/password.svg" alt="">
+        </div>
+        <input class="btn" type="submit" name="register" value="Registrar">
+    </form>
+
+    <?php
+    include ("registrar.php");
+    ?>
+</body>
+
+</html>  
+
+
+<?php
+include ("conexion.php");
+
+if (isset($_POST['register'])) {
+    if (
+        strlen($_POST['name'])      >= 1 &&
+        strlen($_POST['direction']) >= 1 &&
+        strlen($_POST['email'])     >= 1 &&
+        strlen($_POST['phone'])     >= 1 &&
+        strlen($_POST['password'])  >= 1
+    ) {
+        $name       = trim($_POST['name']);
+        $direction  = trim($_POST['direction']);
+        $email      = trim($_POST['email']);
+        $phone      = trim($_POST['phone']);
+        $password   = trim($_POST['password']);
+        $fecha      = date("d/m/y");
+        $consulta   = "INSERT INTO datos(nombre,direccion,email,telefono,contrasena,fecha)
+                        VALUES('$name', '$direction', '$email', '$phone', '$password', '$fecha')";
+        $resultado  = mysqli_query($conex, $consulta);
+        if ($resultado) {
+            echo "<script>alert('Tu registro se completó');</script>";        
+           
+        } else {
+            echo "<script>alert('Algo ocurrio mal, vuelve a intentar');</script>";                    
+        }
+    } else {
+        echo "<script>alert('Tu registro no se completó, intenta de nuevo');</script>";                    
+       
+    }
+
+}
+?>
+<?php
+
+$server = "localhost";
+$username = "root";
+$password = "";
+$database = "basetaf";
+
+$conex = new mysqli($server, $username, $password, $database);
+
+if ($conex->connect_error) {
+    die("Conexión fallida: " . $conex->connect_error);
+}
+?>
